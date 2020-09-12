@@ -48,17 +48,24 @@ async def ingestor(websocket, path):
 
 	with mic as source:
 		# We train the model.
-		r.adjust_for_ambient_noise(source)
-		print("Log Init Ambient Noise", getTimeSince(start))
+		# r.adjust_for_ambient_noise(source)
+		
 
 		while True:
+			
+			r.adjust_for_ambient_noise(source)
+			print("Log Init Ambient Noise", getTimeSince(start))
 			
 			audio = r.listen(source)
 			print("Log Init Listen", getTimeSince(start))
 
 			try:
-				# response["transcription"] = r.recognize_wit(audio, witKey, show_all=True)
-				response["transcription"] = r.recognize_google(audio, show_all=True)
+				response["transcription"] = r.recognize_wit(audio, witKey, show_all=True)
+				# response["transcription"] = r.recognize_google(audio, show_all=True)
+
+				# Problem 1: This is grabbing too much data. We need to take snapshots.
+				# We need to refactor this to be asynch.
+
 				print("Log Recognizer ", getTimeSince(start))
 				
 				
